@@ -28,12 +28,12 @@ public class ServiceOlli {
 
     public Usuaria cargaUsuaria(String nombre) {
         Optional<Usuaria> usuario = usuariaRepo.findByIdOptional(nombre);
-        return usuario.isPresent()? usuario.get():new Usuaria();
+        return usuario.orElseGet(Usuaria::new);
     }
 
     public Item cargaItem(String objeto) {
         Optional<Item> item = itemRepo.findByIdOptional(objeto);
-        return item.isPresent()? item.get():new Item();
+        return item.orElseGet(Item::new);
     }
 
     public List<Orden> cargaOrden(String usuaria_nombre) {
