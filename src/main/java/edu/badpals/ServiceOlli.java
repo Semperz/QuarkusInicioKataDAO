@@ -39,6 +39,9 @@ public class ServiceOlli {
     public List<Orden> cargaOrden(String usuaria_nombre) {
         return ordenRepo.findByUserName(usuaria_nombre);
     }
+    public void deleteUser(String usuaria_nombre){
+        usuariaRepo.deleteById(usuaria_nombre);
+    }
     @Transactional
     public Orden comanda(String usuaria, String objeto) {
         Orden orden = null;
