@@ -3,6 +3,10 @@ package edu.badpals;
 import java.util.Arrays;
 import java.util.List;
 
+import edu.badpals.repository.ItemRepo;
+import edu.badpals.repository.OrdenRepo;
+import edu.badpals.repository.UsuariaRepo;
+import jakarta.validation.constraints.AssertTrue;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import edu.badpals.domain.Item;
@@ -23,6 +27,15 @@ public class ServiceTest {
 
     @Inject
     ServiceOlli servicio;
+
+    @Inject
+    UsuariaRepo userRepo;
+
+    @Inject
+    OrdenRepo ordenRepo;
+
+    @Inject
+    ItemRepo itemRepo;
 
     /**
      * MAPPINGS de la entidades a las tablas de la BBDD.
@@ -274,9 +287,13 @@ public class ServiceTest {
         Assertions.assertThat(pedidos.get(1).getItem().getNombre()).isEqualToIgnoringCase("Elixir of the Mongoose");
         Assertions.assertThat(pedidos.get(2).getItem().getNombre()).isEqualToIgnoringCase("+5 Dexterity Vest");
         Orden orden = em.find(Orden.class, pedidos.get(1).getId());
-        em.remove(orden);
+        servicio.deleteOrden(orden);
         orden = em.find(Orden.class, pedidos.get(0).getId());
-        em.remove(orden);
+        servicio.deleteOrden(orden);
+        query = em.createQuery("select orden from Orden orden join orden.user user where user.nombre = 'Hermione'", Orden.class);
+        pedidos = query.getResultList();
+
+        Assertions.assertThat(pedidos).hasSize(1);
     }
 
     // No se permiten ordenes si el usuario no existe en la base de datos
@@ -295,5 +312,26 @@ public class ServiceTest {
         Assertions.assertThat(servicio).isNotNull();
         List<Orden> ordenes = servicio.comandaMultiple("Hermione", Arrays.asList("Guardapelo Salazar", "Reliquias de la Muerte"));
         Assertions.assertThat(ordenes).isEmpty();
+    }
+
+    @Transactional
+    @Test
+    public void test_crear_user() {
+        Assertions.assertThat(servicio).isNotNull();
+        Usuaria user = new Usuaria();
+        user.setNombre("Victor");
+        user.setDestreza(10);
+        servicio.createUser(user);
+        Assertions.assertThat(servicio.cargaUsuaria("Victor")).isEqualTo(user);
+    }
+
+    @Transactional
+    @Test
+    public void test_delete_user() {
+        Assertions.assertThat(servicio).isNotNull();
+        servicio.deleteUser("Doobey");
+        Assertions.assertThat(servicio.cargaUsuaria("Doobey").getNombre()).isEmpty();
+        Assertions.assertThat(servicio.cargaUsuaria("Doobey").getDestreza()).isZero();
+        Assertions.assertThat(servicio.cargaOrden("Doobey")).isEqualTo(List.of());
     }
 }
