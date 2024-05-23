@@ -40,13 +40,21 @@ public class ServiceOlli {
         return ordenRepo.findByUserName(usuaria_nombre);
     }
 
+
     public Usuaria createUser(Usuaria user){
         usuariaRepo.persist(user);
         return this.cargaUsuaria(user.getNombre());
     }
+
+    public void deleteOrden(Orden orden){
+        ordenRepo.delete(orden);
+    }
+
+
     public void deleteUser(String user){
         usuariaRepo.deleteById(user);
     }
+
     @Transactional
     public Orden comanda(String usuaria, String objeto) {
         Orden orden = null;
