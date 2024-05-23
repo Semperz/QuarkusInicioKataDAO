@@ -1,9 +1,5 @@
 package edu.badpals.domain;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
-import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

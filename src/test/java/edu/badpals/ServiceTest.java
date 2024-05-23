@@ -3,10 +3,6 @@ package edu.badpals;
 import java.util.Arrays;
 import java.util.List;
 
-import edu.badpals.repository.ItemRepo;
-import edu.badpals.repository.OrdenRepo;
-import edu.badpals.repository.UsuariaRepo;
-import jakarta.validation.constraints.AssertTrue;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import edu.badpals.domain.Item;
@@ -27,15 +23,6 @@ public class ServiceTest {
 
     @Inject
     ServiceOlli servicio;
-
-    @Inject
-    UsuariaRepo userRepo;
-
-    @Inject
-    OrdenRepo ordenRepo;
-
-    @Inject
-    ItemRepo itemRepo;
 
     /**
      * MAPPINGS de la entidades a las tablas de la BBDD.

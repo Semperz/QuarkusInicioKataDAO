@@ -41,16 +41,19 @@ public class ServiceOlli {
     }
 
 
+    @Transactional
     public Usuaria createUser(Usuaria user){
         usuariaRepo.persist(user);
         return this.cargaUsuaria(user.getNombre());
     }
 
+    @Transactional
     public void deleteOrden(Orden orden){
         ordenRepo.delete(orden);
     }
 
 
+    @Transactional
     public void deleteUser(String user){
         usuariaRepo.deleteById(user);
     }
@@ -69,6 +72,7 @@ public class ServiceOlli {
         return orden;
     }
 
+    @Transactional
     public List<Orden> comandaMultiple(String usuaria, List<String> objetos) {
         Optional<Usuaria> usuario = usuariaRepo.findByIdOptional(usuaria);
         if (usuario.isEmpty()){
