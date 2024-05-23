@@ -322,16 +322,21 @@ public class ServiceTest {
         user.setNombre("Victor");
         user.setDestreza(10);
         servicio.createUser(user);
-        Assertions.assertThat(servicio.cargaUsuaria("Victor")).isEqualTo(user);
+        Assertions.assertThat(em.find(Usuaria.class,"Victor")).isEqualTo(user);
+        servicio.deleteUser(user.getNombre());
     }
 
     @Transactional
     @Test
     public void test_delete_user() {
         Assertions.assertThat(servicio).isNotNull();
-        servicio.deleteUser("Doobey");
-        Assertions.assertThat(servicio.cargaUsuaria("Doobey").getNombre()).isEmpty();
-        Assertions.assertThat(servicio.cargaUsuaria("Doobey").getDestreza()).isZero();
-        Assertions.assertThat(servicio.cargaOrden("Doobey")).isEqualTo(List.of());
+        Usuaria user = new Usuaria();
+        user.setNombre("Victor");
+        user.setDestreza(10);
+        servicio.createUser(user);
+        servicio.deleteUser("Victor");
+        Assertions.assertThat(servicio.cargaUsuaria("Victor").getNombre()).isEmpty();
+        Assertions.assertThat(servicio.cargaUsuaria("Victor").getDestreza()).isZero();
+        Assertions.assertThat(servicio.cargaOrden("Victor")).isEqualTo(List.of());
     }
 }
